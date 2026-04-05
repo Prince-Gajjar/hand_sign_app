@@ -1,0 +1,328 @@
+# ══════════════════════════════════════════════════════════════════════
+# Auth Screens — Login & Sign Up  (Premium Animated Glassmorphism)
+# ══════════════════════════════════════════════════════════════════════
+
+<LoginScreen>:
+    name: 'login'
+
+    MDFloatLayout:
+        md_bg_color: (0.05, 0.05, 0.08, 1)
+
+        # ── Animated Background Glows ──
+        canvas.before:
+            # Teal Glow
+            Color:
+                rgba: (0, 0.59, 0.53, 0.12)
+            Ellipse:
+                pos: (-dp(120) + app.bg_anim_v1, root.height - dp(320) + app.bg_anim_v2)
+                size: (dp(400), dp(400))
+            
+            # Gold Glow
+            Color:
+                rgba: (0.8, 0.6, 0.1, 0.08)
+            Ellipse:
+                pos: (root.width - dp(180) - app.bg_anim_v2, -dp(100) + app.bg_anim_v1)
+                size: (dp(350), dp(350))
+            
+            # Subtle center nebula
+            Color:
+                rgba: (0.3, 0.1, 0.5, 0.05)
+            Ellipse:
+                pos: (root.width/2 - dp(200), root.height/2 - dp(200))
+                size: (dp(400), dp(400))
+
+        MDBoxLayout:
+            orientation: "vertical"
+            padding: [dp(32), dp(24), dp(32), dp(24)]
+            spacing: dp(0)
+            pos_hint: {"center_x": 0.5, "center_y": 0.5}
+
+            # ── Logo & Branding with Floating Animation ──
+            MDBoxLayout:
+                orientation: "vertical"
+                size_hint_y: None
+                height: dp(240)
+                spacing: dp(12)
+                padding: [0, dp(20), 0, 0]
+
+                MDRelativeLayout:
+                    size_hint: (1, None)
+                    height: dp(120)
+                    
+                    Image:
+                        source: "handsign_logo.png"
+                        fit_mode: "contain"
+                        pos_hint: {"center_x": 0.5}
+                        y: dp(10) + app.logo_float  # Fixed: Use static base offset + float
+
+                MDLabel:
+                    text: "HandSign AI"
+                    font_style: "H4"
+                    halign: "center"
+                    bold: True
+                    theme_text_color: "Custom"
+                    text_color: (1, 1, 1, 0.98)
+                    size_hint_y: None
+                    height: self.texture_size[1]
+
+                MDLabel:
+                    text: "Bridging Silence with Intelligence"
+                    font_style: "Subtitle1"
+                    halign: "center"
+                    theme_text_color: "Custom"
+                    text_color: (1, 1, 1, 0.5)
+                    size_hint_y: None
+                    height: self.texture_size[1]
+                    italic: True
+
+            Widget:
+                size_hint_y: None
+                height: dp(32)
+
+            # ── Login Form Card (Ultra-Glass) ──
+            MDCard:
+                orientation: "vertical"
+                padding: [dp(28), dp(32), dp(28), dp(32)]
+                spacing: dp(20)
+                size_hint_y: None
+                height: dp(340)
+                radius: [dp(24)]
+                elevation: 0
+                md_bg_color: (1, 1, 1, 0.03)
+                line_color: (1, 1, 1, 0.08)
+                
+                MDLabel:
+                    text: "Welcome Back"
+                    font_style: "H6"
+                    bold: True
+                    theme_text_color: "Custom"
+                    text_color: (1, 1, 1, 0.95)
+                    size_hint_y: None
+                    height: self.texture_size[1]
+
+                MDTextField:
+                    id: login_email
+                    hint_text: "Email Address"
+                    icon_left: "email-fast-outline"
+                    mode: "fill"
+                    fill_color_normal: (1, 1, 1, 0.04)
+                    fill_color_focus: (1, 1, 1, 0.06)
+                    active_line: True
+                    line_color_focus: (0, 0.8, 0.7, 1)
+                    radius: [dp(16), dp(16), dp(16), dp(16)]
+                    size_hint_y: None
+                    height: dp(54)
+
+                MDTextField:
+                    id: login_password
+                    hint_text: "Password"
+                    password: True
+                    icon_left: "shield-key-outline"
+                    mode: "fill"
+                    fill_color_normal: (1, 1, 1, 0.04)
+                    fill_color_focus: (1, 1, 1, 0.06)
+                    active_line: True
+                    line_color_focus: (0, 0.8, 0.7, 1)
+                    radius: [dp(16), dp(16), dp(16), dp(16)]
+                    size_hint_y: None
+                    height: dp(54)
+
+                Widget:
+                    size_hint_y: None
+                    height: dp(10)
+
+                MDRaisedButton:
+                    text: "SIGN IN"
+                    size_hint_x: 1
+                    height: dp(54)
+                    font_size: sp(16)
+                    bold: True
+                    md_bg_color: (0, 0.59, 0.53, 1)
+                    elevation: 12
+                    radius: [dp(16)]
+                    on_release: app.login(login_email.text, login_password.text)
+
+            # ── Bottom Section ──
+            Widget:
+                size_hint_y: 1
+
+            MDBoxLayout:
+                orientation: "horizontal"
+                size_hint_y: None
+                height: dp(60)
+                pos_hint: {"center_x": 0.5}
+                spacing: dp(8)
+                padding: [0, 0, 0, dp(16)]
+
+                MDLabel:
+                    text: "New here?"
+                    font_style: "Body2"
+                    halign: "right"
+                    theme_text_color: "Custom"
+                    text_color: (1, 1, 1, 0.5)
+
+                MDTextButton:
+                    text: "CREATE ACCOUNT"
+                    font_size: sp(14)
+                    theme_text_color: "Custom"
+                    text_color: (0, 0.8, 0.7, 1)
+                    bold: True
+                    on_release: app.change_screen('signup')
+                    pos_hint: {"center_y": 0.5}
+
+
+<SignUpScreen>:
+    name: 'signup'
+
+    MDFloatLayout:
+        md_bg_color: (0.05, 0.05, 0.08, 1)
+
+        canvas.before:
+            # Gold Glow
+            Color:
+                rgba: (0.8, 0.6, 0.1, 0.08)
+            Ellipse:
+                pos: (-dp(100) + app.bg_anim_v2, root.height - dp(240) + app.bg_anim_v1)
+                size: (dp(320), dp(320))
+            
+            # Teal Glow
+            Color:
+                rgba: (0, 0.59, 0.53, 0.1)
+            Ellipse:
+                pos: (root.width - dp(200) - app.bg_anim_v1, -dp(80) + app.bg_anim_v2)
+                size: (dp(380), dp(380))
+
+        MDBoxLayout:
+            orientation: "vertical"
+            padding: [dp(32), dp(40), dp(32), dp(24)]
+            spacing: dp(0)
+
+            # ── Header ──
+            MDBoxLayout:
+                orientation: "horizontal"
+                size_hint_y: None
+                height: dp(64)
+                spacing: dp(12)
+
+                MDIconButton:
+                    icon: "chevron-left"
+                    theme_text_color: "Custom"
+                    text_color: (1, 1, 1, 0.8)
+                    md_bg_color: (1, 1, 1, 0.05)
+                    on_release: app.change_screen('login')
+                    pos_hint: {"center_y": 0.5}
+
+                MDLabel:
+                    text: "Join HandSign"
+                    font_style: "H5"
+                    bold: True
+                    valign: "center"
+                    theme_text_color: "Custom"
+                    text_color: (1, 1, 1, 0.95)
+
+            MDLabel:
+                text: "Experience the future of translation"
+                font_style: "Body2"
+                theme_text_color: "Custom"
+                text_color: (1, 1, 1, 0.4)
+                size_hint_y: None
+                height: self.texture_size[1]
+                padding: [dp(16), 0]
+
+            Widget:
+                size_hint_y: None
+                height: dp(32)
+
+            # ── Sign Up Form Card ──
+            MDCard:
+                orientation: "vertical"
+                padding: [dp(28), dp(32), dp(28), dp(32)]
+                spacing: dp(18)
+                size_hint_y: None
+                height: dp(380)
+                radius: [dp(24)]
+                elevation: 0
+                md_bg_color: (1, 1, 1, 0.03)
+                line_color: (1, 1, 1, 0.08)
+
+                MDTextField:
+                    id: signup_email
+                    hint_text: "Email Address"
+                    icon_left: "email-outline"
+                    mode: "fill"
+                    fill_color_normal: (1, 1, 1, 0.04)
+                    fill_color_focus: (1, 1, 1, 0.06)
+                    active_line: True
+                    line_color_focus: (0, 0.8, 0.7, 1)
+                    radius: [dp(16), dp(16), dp(16), dp(16)]
+                    size_hint_y: None
+                    height: dp(54)
+
+                MDTextField:
+                    id: signup_password
+                    hint_text: "Choose Password"
+                    password: True
+                    icon_left: "lock-outline"
+                    mode: "fill"
+                    fill_color_normal: (1, 1, 1, 0.04)
+                    fill_color_focus: (1, 1, 1, 0.06)
+                    active_line: True
+                    line_color_focus: (0, 0.8, 0.7, 1)
+                    radius: [dp(16), dp(16), dp(16), dp(16)]
+                    size_hint_y: None
+                    height: dp(54)
+
+                MDTextField:
+                    id: signup_confirm_password
+                    hint_text: "Confirm Password"
+                    password: True
+                    icon_left: "lock-check-outline"
+                    mode: "fill"
+                    fill_color_normal: (1, 1, 1, 0.04)
+                    fill_color_focus: (1, 1, 1, 0.06)
+                    active_line: True
+                    line_color_focus: (0, 0.8, 0.7, 1)
+                    radius: [dp(16), dp(16), dp(16), dp(16)]
+                    size_hint_y: None
+                    height: dp(54)
+
+                Widget:
+                    size_hint_y: None
+                    height: dp(12)
+
+                MDRaisedButton:
+                    text: "CREATE ACCOUNT"
+                    size_hint_x: 1
+                    height: dp(54)
+                    font_size: sp(16)
+                    bold: True
+                    md_bg_color: (0, 0.59, 0.53, 1)
+                    elevation: 12
+                    radius: [dp(16)]
+                    on_release: app.signup(signup_email.text, signup_password.text, signup_confirm_password.text)
+
+            Widget:
+                size_hint_y: 1
+
+            MDBoxLayout:
+                orientation: "horizontal"
+                size_hint_y: None
+                height: dp(60)
+                pos_hint: {"center_x": 0.5}
+                spacing: dp(8)
+
+                MDLabel:
+                    text: "Member already?"
+                    font_style: "Body2"
+                    halign: "right"
+                    theme_text_color: "Custom"
+                    text_color: (1, 1, 1, 0.5)
+
+                MDTextButton:
+                    text: "SIGN IN"
+                    font_size: sp(14)
+                    theme_text_color: "Custom"
+                    text_color: (0, 0.8, 0.7, 1)
+                    bold: True
+                    on_release: app.change_screen('login')
+                    pos_hint: {"center_y": 0.5}

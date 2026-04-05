@@ -1,0 +1,594 @@
+# ══════════════════════════════════════════════════════════════════════
+# Main Detection Screen  (Premium Dark UI)
+# ══════════════════════════════════════════════════════════════════════
+
+<MainScreen>:
+    MDBoxLayout:
+        orientation: "vertical"
+        md_bg_color: 0.06, 0.06, 0.09, 1
+
+        # ── Top App Bar ──
+        MDTopAppBar:
+            title: "HandSign AI"
+            left_action_items: [["menu", lambda x: nav_drawer.set_state("open")]]
+            right_action_items: [["camera-flip-outline", lambda x: app.flip_camera()], ["content-copy", lambda x: app.copy_to_clipboard()]]
+            elevation: 0
+            md_bg_color: 0.06, 0.06, 0.09, 1
+            specific_text_color: 1, 1, 1, 0.9
+
+        MDBoxLayout:
+            orientation: "vertical"
+            padding: [dp(12), dp(8), dp(12), dp(8)]
+            spacing: dp(10)
+
+            # ══════════════════════════════════════════════════════
+            # Camera Viewport
+            # ══════════════════════════════════════════════════════
+            MDCard:
+                size_hint_y: 0.52
+                radius: [dp(16)]
+                elevation: 0
+                md_bg_color: 0.08, 0.08, 0.11, 1
+                line_color: 1, 1, 1, 0.06
+                ripple_behavior: False
+
+                MDRelativeLayout:
+
+                    # Camera feed
+                    Image:
+                        id: camera_preview
+                        fit_mode: "contain"
+
+
+
+                    # ── Bottom overlay: detected gesture ──
+                    MDBoxLayout:
+                        size_hint: 1, None
+                        height: dp(52)
+                        padding: [dp(16), dp(8)]
+                        pos_hint: {"y": 0}
+
+                        canvas.before:
+                            Color:
+                                rgba: 0, 0, 0, 0.6
+                            RoundedRectangle:
+                                pos: self.pos
+                                size: self.size
+                                radius: [0, 0, dp(16), dp(16)]
+
+                        MDIcon:
+                            icon: "hand-wave"
+                            theme_text_color: "Custom"
+                            text_color: 0.2, 0.9, 0.5, 0.9
+                            size_hint: None, None
+                            size: dp(28), dp(28)
+                            pos_hint: {"center_y": 0.5}
+
+                        Widget:
+                            size_hint_x: None
+                            width: dp(10)
+
+                        MDLabel:
+                            id: current_gesture
+                            text: "Ready"
+                            halign: "left"
+                            valign: "center"
+                            theme_text_color: "Custom"
+                            text_color: 0.2, 0.95, 0.55, 1
+                            font_style: "H6"
+                            bold: True
+
+            # ══════════════════════════════════════════════════════
+            # Conversation Output Card
+            # ══════════════════════════════════════════════════════
+            MDCard:
+                size_hint_y: None
+                height: dp(100)
+                radius: [dp(16)]
+                elevation: 0
+                md_bg_color: 1, 1, 1, 0.04
+                line_color: 1, 1, 1, 0.06
+                padding: [dp(16), dp(12)]
+                ripple_behavior: False
+
+                MDBoxLayout:
+                    orientation: "vertical"
+                    spacing: dp(4)
+
+                    MDLabel:
+                        text: "Conversation"
+                        font_style: "Overline"
+                        theme_text_color: "Custom"
+                        text_color: 1, 1, 1, 0.35
+                        size_hint_y: None
+                        height: dp(16)
+
+                    ScrollView:
+                        do_scroll_x: False
+
+                        MDLabel:
+                            id: conversation_output
+                            text: ""
+                            font_style: "Subtitle1"
+                            halign: "left"
+                            valign: "top"
+                            theme_text_color: "Custom"
+                            text_color: 1, 1, 1, 0.85
+                            size_hint_y: None
+                            height: self.texture_size[1]
+                            text_size: self.width, None
+
+            # ══════════════════════════════════════════════════════
+            # Suggestion Chips
+            # ══════════════════════════════════════════════════════
+            ScrollView:
+                size_hint_y: None
+                height: dp(40)
+                do_scroll_y: False
+
+                MDBoxLayout:
+                    id: suggestion_box
+                    orientation: "horizontal"
+                    size_hint_x: None
+                    width: self.minimum_width
+                    spacing: dp(8)
+                    padding: [dp(4), 0]
+
+            # ══════════════════════════════════════════════════════
+            # Voice Speed Slider
+            # ══════════════════════════════════════════════════════
+            MDBoxLayout:
+                size_hint_y: None
+                height: dp(38)
+                spacing: dp(8)
+                padding: [dp(8), 0]
+
+                MDIcon:
+                    icon: "speedometer-slow"
+                    theme_text_color: "Custom"
+                    text_color: 1, 1, 1, 0.3
+                    size_hint: None, None
+                    size: dp(20), dp(20)
+                    pos_hint: {"center_y": 0.5}
+
+                MDSlider:
+                    id: voice_slider
+                    min: 80
+                    max: 300
+                    value: 175
+                    hint: False
+                    color: 0, 0.59, 0.53, 1
+                    pos_hint: {"center_y": 0.5}
+
+                MDIcon:
+                    icon: "speedometer"
+                    theme_text_color: "Custom"
+                    text_color: 1, 1, 1, 0.3
+                    size_hint: None, None
+                    size: dp(20), dp(20)
+                    pos_hint: {"center_y": 0.5}
+
+            # ══════════════════════════════════════════════════════
+            # Action Buttons Row
+            # ══════════════════════════════════════════════════════
+            MDBoxLayout:
+                size_hint_y: None
+                height: dp(56)
+                spacing: dp(10)
+                padding: [dp(4), 0, dp(4), dp(4)]
+
+                # Clear Button
+                MDIconButton:
+                    icon: "trash-can-outline"
+                    on_release: app.clear_sentence()
+                    md_bg_color: 1, 1, 1, 0.06
+                    theme_text_color: "Custom"
+                    text_color: 0.95, 0.3, 0.3, 0.85
+                    pos_hint: {"center_y": 0.5}
+
+                # Speak Button (Primary CTA)
+                MDRaisedButton:
+                    text: "  SPEAK NOW  "
+                    icon: "volume-high"
+                    size_hint_x: 1
+                    height: dp(50)
+                    font_size: sp(14)
+                    md_bg_color: 0, 0.59, 0.53, 1
+                    elevation: 0
+                    radius: [dp(14)]
+                    pos_hint: {"center_y": 0.5}
+                    on_release: app.speak_sentence()
+
+                # Auto-Speak Toggle
+                MDIconButton:
+                    icon: "microphone" if app.auto_speak_enabled == "ON" else "microphone-off"
+                    on_release: app.toggle_auto_speak()
+                    md_bg_color: (0, 0.59, 0.53, 0.15) if app.auto_speak_enabled == "ON" else (1, 1, 1, 0.06)
+                    theme_text_color: "Custom"
+                    text_color: (0, 0.59, 0.53, 1) if app.auto_speak_enabled == "ON" else (1, 1, 1, 0.4)
+                    pos_hint: {"center_y": 0.5}
+
+                # Emergency Button
+                MDIconButton:
+                    icon: "alert-circle-outline"
+                    on_release: app.trigger_emergency()
+                    md_bg_color: 0.85, 0.18, 0.18, 0.15
+                    theme_text_color: "Custom"
+                    text_color: 0.95, 0.3, 0.3, 1
+                    pos_hint: {"center_y": 0.5}
+
+    # ══════════════════════════════════════════════════════════════
+    # Navigation Drawer
+    # ══════════════════════════════════════════════════════════════
+    MDNavigationDrawer:
+        id: nav_drawer
+        radius: (0, dp(20), dp(20), 0)
+        md_bg_color: 0.08, 0.08, 0.11, 1
+
+        MDBoxLayout:
+            orientation: "vertical"
+            padding: dp(0)
+            spacing: dp(0)
+
+            # ── Drawer Header ──
+            MDBoxLayout:
+                orientation: "vertical"
+                size_hint_y: None
+                height: dp(160)
+                padding: [dp(20), dp(24), dp(20), dp(16)]
+                spacing: dp(8)
+
+                canvas.before:
+                    Color:
+                        rgba: 0, 0.59, 0.53, 0.08
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [0, dp(20), 0, 0]
+
+                Image:
+                    source: "handsign_logo.png"
+                    fit_mode: "contain"
+                    size_hint_y: None
+                    height: dp(56)
+
+                MDLabel:
+                    text: "HandSign AI"
+                    font_style: "H6"
+                    bold: True
+                    halign: "center"
+                    theme_text_color: "Custom"
+                    text_color: 1, 1, 1, 0.9
+                    size_hint_y: None
+                    height: self.texture_size[1]
+
+                MDLabel:
+                    text: f"Session: {app.session_count} detections"
+                    font_style: "Caption"
+                    halign: "center"
+                    theme_text_color: "Custom"
+                    text_color: 0, 0.59, 0.53, 0.7
+                    size_hint_y: None
+                    height: self.texture_size[1]
+
+            # ── Drawer Menu ──
+            ScrollView:
+                MDList:
+                    spacing: dp(2)
+
+                    OneLineIconListItem:
+                        text: "Custom Gestures"
+                        theme_text_color: "Custom"
+                        text_color: 1, 1, 1, 0.8
+                        on_release:
+                            nav_drawer.set_state("close")
+                            app.change_screen('gestures')
+                            app.refresh_gestures_list()
+                        IconLeftWidget:
+                            icon: "hand-wave"
+                            theme_text_color: "Custom"
+                            text_color: 0, 0.59, 0.53, 0.8
+
+                    OneLineIconListItem:
+                        text: "Detection History"
+                        theme_text_color: "Custom"
+                        text_color: 1, 1, 1, 0.8
+                        on_release: app.show_history_dialog()
+                        IconLeftWidget:
+                            icon: "history"
+                            theme_text_color: "Custom"
+                            text_color: 0, 0.59, 0.53, 0.8
+
+                    OneLineIconListItem:
+                        text: "Recalibrate Detector"
+                        theme_text_color: "Custom"
+                        text_color: 1, 1, 1, 0.8
+                        on_release: app.recalibrate()
+                        IconLeftWidget:
+                            icon: "tune"
+                            theme_text_color: "Custom"
+                            text_color: 0, 0.59, 0.53, 0.8
+
+                    OneLineIconListItem:
+                        text: "Export Session Log"
+                        theme_text_color: "Custom"
+                        text_color: 1, 1, 1, 0.8
+                        on_release: app.export_session()
+                        IconLeftWidget:
+                            icon: "file-export-outline"
+                            theme_text_color: "Custom"
+                            text_color: 0, 0.59, 0.53, 0.8
+
+                    OneLineIconListItem:
+                        text: "User Guide"
+                        theme_text_color: "Custom"
+                        text_color: 1, 1, 1, 0.8
+                        on_release:
+                            nav_drawer.set_state("close")
+                            app.change_screen('help')
+                        IconLeftWidget:
+                            icon: "book-open-variant"
+                            theme_text_color: "Custom"
+                            text_color: 0, 0.59, 0.53, 0.8
+
+                    # ── Language Selector ──
+                    OneLineIconListItem:
+                        text: f"Language: {app.current_lang}"
+                        theme_text_color: "Custom"
+                        text_color: 1, 1, 1, 0.8
+                        on_release: app.show_language_dialog()
+                        IconLeftWidget:
+                            icon: "translate"
+                            theme_text_color: "Custom"
+                            text_color: 0, 0.59, 0.53, 0.8
+
+                    # Separator
+                    MDBoxLayout:
+                        size_hint_y: None
+                        height: dp(1)
+                        md_bg_color: 1, 1, 1, 0.06
+                        padding: [dp(16), 0]
+
+                    OneLineIconListItem:
+                        text: "Sign Out"
+                        theme_text_color: "Custom"
+                        text_color: 0.95, 0.3, 0.3, 0.7
+                        on_release: app.logout()
+                        IconLeftWidget:
+                            icon: "logout"
+                            theme_text_color: "Custom"
+                            text_color: 0.95, 0.3, 0.3, 0.7
+
+
+# ══════════════════════════════════════════════════════════════════════
+# Custom Gestures Screen
+# ══════════════════════════════════════════════════════════════════════
+
+<CustomGesturesScreen>:
+    MDBoxLayout:
+        orientation: "vertical"
+        md_bg_color: 0.06, 0.06, 0.09, 1
+
+        MDTopAppBar:
+            title: "Custom Gestures"
+            left_action_items: [["arrow-left", lambda x: app.change_screen('main')]]
+            right_action_items: [["plus-circle-outline", lambda x: app.show_custom_gestures_dialog()]]
+            elevation: 0
+            md_bg_color: 0.06, 0.06, 0.09, 1
+            specific_text_color: 1, 1, 1, 0.9
+
+        # Info Banner
+        MDBoxLayout:
+            size_hint_y: None
+            height: dp(60)
+            padding: [dp(20), dp(10)]
+            spacing: dp(12)
+            md_bg_color: 0, 0.59, 0.53, 0.06
+
+            MDIcon:
+                icon: "information-outline"
+                theme_text_color: "Custom"
+                text_color: 0, 0.59, 0.53, 0.7
+                size_hint: None, None
+                size: dp(24), dp(24)
+                pos_hint: {"center_y": 0.5}
+
+            MDLabel:
+                text: "Make a gesture in front of the camera, then tap + to save it with a custom phrase."
+                font_style: "Caption"
+                theme_text_color: "Custom"
+                text_color: 1, 1, 1, 0.5
+
+        ScrollView:
+            MDList:
+                id: gestures_list
+                padding: [dp(8), dp(8)]
+
+
+# ══════════════════════════════════════════════════════════════════════
+# Help & Guide Screen
+# ══════════════════════════════════════════════════════════════════════
+
+<HelpScreen>:
+    MDBoxLayout:
+        orientation: "vertical"
+        md_bg_color: 0.06, 0.06, 0.09, 1
+
+        MDTopAppBar:
+            title: "User Guide"
+            left_action_items: [["arrow-left", lambda x: app.change_screen('main')]]
+            elevation: 0
+            md_bg_color: 0.06, 0.06, 0.09, 1
+            specific_text_color: 1, 1, 1, 0.9
+
+        ScrollView:
+            MDBoxLayout:
+                orientation: "vertical"
+                padding: [dp(20), dp(16)]
+                spacing: dp(16)
+                size_hint_y: None
+                height: self.minimum_height
+
+                # ── Getting Started ──
+                MDCard:
+                    orientation: "vertical"
+                    padding: dp(20)
+                    spacing: dp(10)
+                    size_hint_y: None
+                    height: self.minimum_height
+                    radius: [dp(16)]
+                    elevation: 0
+                    md_bg_color: 1, 1, 1, 0.04
+                    line_color: 1, 1, 1, 0.06
+
+                    MDBoxLayout:
+                        size_hint_y: None
+                        height: dp(32)
+                        spacing: dp(10)
+
+                        MDIcon:
+                            icon: "rocket-launch-outline"
+                            theme_text_color: "Custom"
+                            text_color: 0, 0.59, 0.53, 0.9
+                            size_hint: None, None
+                            size: dp(24), dp(24)
+                            pos_hint: {"center_y": 0.5}
+
+                        MDLabel:
+                            text: "Getting Started"
+                            font_style: "H6"
+                            bold: True
+                            theme_text_color: "Custom"
+                            text_color: 1, 1, 1, 0.9
+
+                    MDLabel:
+                        text: "Hold your hand clearly in front of the camera. The AI will detect your hand gestures and translate them into text in real-time."
+                        theme_text_color: "Custom"
+                        text_color: 1, 1, 1, 0.55
+                        size_hint_y: None
+                        height: self.texture_size[1]
+                        text_size: self.width, None
+
+                # ── Built-in Gestures ──
+                MDCard:
+                    orientation: "vertical"
+                    padding: dp(20)
+                    spacing: dp(10)
+                    size_hint_y: None
+                    height: self.minimum_height
+                    radius: [dp(16)]
+                    elevation: 0
+                    md_bg_color: 1, 1, 1, 0.04
+                    line_color: 1, 1, 1, 0.06
+
+                    MDBoxLayout:
+                        size_hint_y: None
+                        height: dp(32)
+                        spacing: dp(10)
+
+                        MDIcon:
+                            icon: "hand-wave"
+                            theme_text_color: "Custom"
+                            text_color: 0, 0.59, 0.53, 0.9
+                            size_hint: None, None
+                            size: dp(24), dp(24)
+                            pos_hint: {"center_y": 0.5}
+
+                        MDLabel:
+                            text: "Built-in Gestures"
+                            font_style: "H6"
+                            bold: True
+                            theme_text_color: "Custom"
+                            text_color: 1, 1, 1, 0.9
+
+                    MDLabel:
+                        text: "✋  Open Palm → HELLO\n👍  Thumb Up → YES\n✊  Fist → NO\n🤚🤚  Both Hands Open → EMERGENCY\n🔤  A–Z via the trained ASL model"
+                        theme_text_color: "Custom"
+                        text_color: 1, 1, 1, 0.55
+                        size_hint_y: None
+                        height: self.texture_size[1]
+                        text_size: self.width, None
+
+                # ── Tips ──
+                MDCard:
+                    orientation: "vertical"
+                    padding: dp(20)
+                    spacing: dp(10)
+                    size_hint_y: None
+                    height: self.minimum_height
+                    radius: [dp(16)]
+                    elevation: 0
+                    md_bg_color: 1, 1, 1, 0.04
+                    line_color: 1, 1, 1, 0.06
+
+                    MDBoxLayout:
+                        size_hint_y: None
+                        height: dp(32)
+                        spacing: dp(10)
+
+                        MDIcon:
+                            icon: "lightbulb-on-outline"
+                            theme_text_color: "Custom"
+                            text_color: 0.85, 0.75, 0.1, 0.9
+                            size_hint: None, None
+                            size: dp(24), dp(24)
+                            pos_hint: {"center_y": 0.5}
+
+                        MDLabel:
+                            text: "Pro Tips"
+                            font_style: "H6"
+                            bold: True
+                            theme_text_color: "Custom"
+                            text_color: 1, 1, 1, 0.9
+
+                    MDLabel:
+                        text: "• Good lighting improves accuracy\n• Keep your hand within the camera frame\n• Use Recalibrate if detection drifts\n• Auto-speak reads your sentence after a 2.5s pause\n• Adjust voice speed with the slider on the main screen\n• Save custom gestures to train your own phrases"
+                        theme_text_color: "Custom"
+                        text_color: 1, 1, 1, 0.55
+                        size_hint_y: None
+                        height: self.texture_size[1]
+                        text_size: self.width, None
+
+                # ── About ──
+                MDCard:
+                    orientation: "vertical"
+                    padding: dp(20)
+                    spacing: dp(10)
+                    size_hint_y: None
+                    height: self.minimum_height
+                    radius: [dp(16)]
+                    elevation: 0
+                    md_bg_color: 1, 1, 1, 0.04
+                    line_color: 1, 1, 1, 0.06
+
+                    MDBoxLayout:
+                        size_hint_y: None
+                        height: dp(32)
+                        spacing: dp(10)
+
+                        MDIcon:
+                            icon: "information-outline"
+                            theme_text_color: "Custom"
+                            text_color: 0, 0.59, 0.53, 0.9
+                            size_hint: None, None
+                            size: dp(24), dp(24)
+                            pos_hint: {"center_y": 0.5}
+
+                        MDLabel:
+                            text: "About"
+                            font_style: "H6"
+                            bold: True
+                            theme_text_color: "Custom"
+                            text_color: 1, 1, 1, 0.9
+
+                    MDLabel:
+                        text: "HandSign AI uses MediaPipe and Machine Learning to bridge communication gaps. Translate sign language to text & speech instantly.\n\nBuilt with ❤ for accessibility."
+                        theme_text_color: "Custom"
+                        text_color: 1, 1, 1, 0.55
+                        size_hint_y: None
+                        height: self.texture_size[1]
+                        text_size: self.width, None
+
+                Widget:
+                    size_hint_y: None
+                    height: dp(32)

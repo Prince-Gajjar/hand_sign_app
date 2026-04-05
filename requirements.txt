@@ -1,0 +1,11 @@
+kivy==2.3.0
+kivymd==1.1.1
+opencv-python
+mediapipe
+numpy
+plyer
+pyttsx3
+scikit-learn
+tqdm
+supabase
+python-dotenv

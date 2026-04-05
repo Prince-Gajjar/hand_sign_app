@@ -1,0 +1,53 @@
+# Python-specific ignores
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+
+# Kivy / Buildozer
+.buildozer/
+bin/
+*.spec
+# Note: Keeping buildozer.spec might be useful, but ignoring logs
+*.log
+last_crash.txt
+
+# Node / JS
+node_modules/
+package-lock.json
+
+# Dataset / Data
+asl_dataset/
+temp_downloads/
+session_data.json
+hand_sign_app.zip
+
+# Credentials and secrets
+.env
+kaggle.json
+
+# OS specific
+.DS_Store
+Thumbs.db
